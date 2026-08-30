@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import "./button-contrast.css";
 import "./trust.css";
@@ -24,5 +25,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const schema = [organizationSchema(),websiteSchema()];
-  return <html lang="en-IN" className={manrope.variable}><body><a className="skip-link" href="#main">Skip to content</a>{children}<SalesChatWidget/><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }} /></body></html>;
+  return <html lang="en-IN" className={manrope.variable}><body><a className="skip-link" href="#main">Skip to content</a>{children}<SalesChatWidget/><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }} /><Script src="https://www.googletagmanager.com/gtag/js?id=G-QJYSSGBX9S" strategy="afterInteractive"/><Script id="google-analytics" strategy="afterInteractive">{`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-QJYSSGBX9S');`}</Script></body></html>;
 }
