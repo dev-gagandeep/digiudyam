@@ -47,6 +47,7 @@
 .services-faq>.container{align-items:start}
 .services-faq>.container>div:first-child{padding-top:4px}
 .services-faq h2{font-size:clamp(36px,4vw,54px);line-height:1.1;letter-spacing:-.045em;margin:20px 0 0}
+.footer-brand>a+a{margin-top:12px}
 @media(max-width:1180px){.service-mega{transform:translateX(-40%);grid-template-columns:230px minmax(0,1fr)}.service-mega>header{padding:24px}.mega-service-groups>section{grid-template-columns:1fr}.mega-service-groups>section>div>p{display:none}.industry-menu{transform:translateX(-48%)}}
 @media(max-width:900px){.services-principles>.container{grid-template-columns:1fr;gap:55px}.services-principles-head{position:static}.services-faq{padding:90px 0 105px}}
 @media(max-width:650px){.services-principles{padding:80px 0}.services-principles-grid{grid-template-columns:1fr}.services-principles-grid article,.services-principles-grid article:nth-child(odd),.services-principles-grid article:last-child{grid-column:auto;border-right:0;min-height:145px;padding:22px 5px}.services-principles-grid article>svg{right:5px}.services-principles-grid article>p{font-size:14px;margin-top:38px}.services-faq{padding:82px 0 100px}.services-faq>.container{gap:42px}.services-faq h2{font-size:36px}}
