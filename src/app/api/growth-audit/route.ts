@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { takeChatRateLimit } from "@/lib/chat/rate-limit";
 import { emitNotificationSafe } from "@/lib/notifications/service";
+import { sendWeb3Forms,Web3FormsChannel } from "@/lib/web3forms";
 
 export const runtime = "nodejs";
 const clean = (value: unknown, max = 180) => typeof value === "string" ? value.trim().slice(0, max) : "";
@@ -11,8 +12,9 @@ export async function POST(request: NextRequest) {
   const rate = takeChatRateLimit(`audit:${address}`, 5, 15 * 60 * 1000);
   if (!rate.allowed) return NextResponse.json({ error: "Too many requests. Please try again shortly." }, { status: 429 });
   let body: Record<string, unknown>; try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid request." }, { status: 400 }); }
-  const name = clean(body.name), business = clean(body.business_name), phone = clean(body.phone, 30), city = clean(body.city), website = clean(body.website), service = clean(body.service);
+  const name = clean(body.name), business = clean(body.business_name), phone = clean(body.phone, 30), city = clean(body.city), website = clean(body.website), service = clean(body.service), source:Web3FormsChannel=body.source==="home"?"home":"free-audit";
   if (!name || !business || !phone || !city || !service) return NextResponse.json({ error: "Please complete all required fields." }, { status: 400 });
+  try{await sendWeb3Forms(source,`Growth audit: ${business}`,{name,business_name:business,phone,city,website:website||"Not provided",required_service:service,page_url:source==="home"?"https://digiudyam.in/":"https://digiudyam.in/free-audit"})}catch(deliveryError){console.error("Growth audit email delivery failed",{source,code:deliveryError instanceof Error?deliveryError.message:"UNKNOWN"});return NextResponse.json({error:"We could not send your request. Please email hello@digiudyam.com."},{status:503})}
   const db = createSupabaseAdminClient();
   const { data: staff, error: staffError } = await db.from("profiles").select("id,role").eq("status", "active").in("role", ["super_admin", "admin", "account_manager"]).order("created_at");
   if (staffError || !staff?.length) { console.error("Growth audit owner lookup failed", { code: staffError?.code }); return NextResponse.json({ error: "We could not save your request. Please contact us on WhatsApp." }, { status: 503 }); }

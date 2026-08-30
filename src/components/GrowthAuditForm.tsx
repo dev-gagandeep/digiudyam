@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { ArrowRight, CheckCircle } from "@phosphor-icons/react";
 
-export function GrowthAuditForm() {
+export function GrowthAuditForm({source="free-audit"}:{source?:"home"|"free-audit"}) {
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [error, setError] = useState("");
 
   async function submit(formData: FormData) {
     setState("sending"); setError("");
-    const payload = Object.fromEntries(formData.entries());
+    const payload = {...Object.fromEntries(formData.entries()),source};
     try {
       const response = await fetch("/api/growth-audit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const result = await response.json();
