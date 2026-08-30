@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { ArrowRight, CheckCircle } from "@phosphor-icons/react";
+import { submitWeb3Forms } from "@/lib/web3forms-client";
 
-export function GrowthAuditForm({source="free-audit"}:{source?:"home"|"free-audit"}) {
+export function GrowthAuditForm({source="free-audit",accessKey}:{source?:"home"|"free-audit";accessKey:string}) {
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [error, setError] = useState("");
 
@@ -11,9 +12,10 @@ export function GrowthAuditForm({source="free-audit"}:{source?:"home"|"free-audi
     setState("sending"); setError("");
     const payload = {...Object.fromEntries(formData.entries()),source};
     try {
+      const values=payload as Record<string,string>;
+      await submitWeb3Forms(accessKey,`Growth audit: ${values.business_name}`,{name:values.name,business_name:values.business_name,phone:values.phone,city:values.city,website:values.website||"Not provided",required_service:values.service,page_url:window.location.href});
       const response = await fetch("/api/growth-audit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || "Could not submit your request.");
+      if(!response.ok)console.error("Growth audit CRM sync failed",{status:response.status});
       setState("sent");
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Could not submit your request."); setState("error");
