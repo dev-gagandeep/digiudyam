@@ -1,0 +1,2 @@
+import "server-only";import type { ProviderAdapter } from "../core";import { ProviderNotConfiguredError } from "../core";
+export const goHighLevelAdapter:ProviderAdapter={id:"gohighlevel",capabilities:{analytics:false,search:false,localPresence:false,ads:false,leads:true,appointments:true,conversations:true,automations:true},async validateConfiguration(){return Boolean(process.env.GHL_CLIENT_ID&&process.env.GHL_CLIENT_SECRET)},async sync(){throw new ProviderNotConfiguredError("gohighlevel")}};

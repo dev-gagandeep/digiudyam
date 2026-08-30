@@ -1,0 +1,3 @@
+-- DEVELOPMENT-ONLY seed placeholder.
+-- Intentionally contains no fake clients, metrics or auth users.
+-- Add local-only records after running migrations in a disposable Supabase project.

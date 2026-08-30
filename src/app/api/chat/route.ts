@@ -1,0 +1,32 @@
+import { createHash,randomBytes } from "crypto";
+import { NextRequest,NextResponse } from "next/server";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { completeChat,GroqApiError,GROQ_ENDPOINT,GROQ_MODEL } from "@/lib/chat/groq";
+import { takeChatRateLimit } from "@/lib/chat/rate-limit";
+import { emitNotificationSafe } from "@/lib/notifications/service";
+export const runtime="nodejs";export const dynamic="force-dynamic";
+const hash=(token:string)=>createHash("sha256").update(token).digest("hex");
+const ip=(request:NextRequest)=>request.headers.get("x-forwarded-for")?.split(",")[0]?.trim()||request.headers.get("x-real-ip")||"unknown";
+const clean=(value:unknown,max=180)=>typeof value==="string"?value.trim().slice(0,max):null;
+
+async function sessionFor(token:string|null){if(!token)return null;const db=createSupabaseAdminClient();const {data}=await db.from("chat_sessions").select("id,lead_id,status").eq("access_token_hash",hash(token)).maybeSingle();return data;}
+export async function GET(request:NextRequest){const token=request.nextUrl.searchParams.get("session");const session=await sessionFor(token);if(!session)return NextResponse.json({messages:[]});const db=createSupabaseAdminClient();const {data,error}=await db.from("chat_messages").select("id,role,content,created_at").eq("session_id",session.id).in("role",["user","assistant"]).order("created_at").limit(60);if(error)return NextResponse.json({error:"Conversation unavailable"},{status:500});return NextResponse.json({messages:data||[]});}
+
+export async function POST(request:NextRequest){
+  const rate=takeChatRateLimit(ip(request));if(!rate.allowed)return NextResponse.json({error:"Too many messages. Please wait a moment."},{status:429,headers:{"Retry-After":String(rate.retryAfter)}});
+  let body:{message?:unknown;session?:unknown};try{body=await request.json()}catch{return NextResponse.json({error:"Invalid request"},{status:400})}
+  const message=clean(body.message,1200);if(!message||message.length<2)return NextResponse.json({error:"Please enter a message."},{status:400});
+  const db=createSupabaseAdminClient();let token=clean(body.session,180),session=await sessionFor(token);if(token&&!session)return NextResponse.json({error:"Conversation session is invalid."},{status:401});
+  if(!session){token=randomBytes(32).toString("base64url");const {data,error}=await db.from("chat_sessions").insert({access_token_hash:hash(token),visitor_metadata:{channel:"website",ip_hash:hash(ip(request))}}).select("id,lead_id,status").single();if(error){console.error("Chat session creation failed",{code:error.code,message:error.message});const setupMissing=error.code==="42P01"||error.code==="PGRST205";return NextResponse.json({error:setupMissing?"The assistant is being configured. Please try again shortly.":"Chat could not be started."},{status:503})}session=data;}
+  const {error:messageError}=await db.from("chat_messages").insert({session_id:session.id,role:"user",content:message});if(messageError)return NextResponse.json({error:"Message could not be saved."},{status:500});
+  const {data:history,error:historyError}=await db.from("chat_messages").select("role,content").eq("session_id",session.id).in("role",["user","assistant"]).order("created_at",{ascending:false}).limit(24);if(historyError)return NextResponse.json({error:"Conversation unavailable."},{status:500});
+  try{
+    const completion=await completeChat((history||[]).reverse() as {role:"user"|"assistant";content:string}[]);
+    const {error:assistantError}=await db.from("chat_messages").insert({session_id:session.id,role:"assistant",content:completion.reply,metadata:{qualified:completion.qualified}});if(assistantError)throw assistantError;
+    await db.from("chat_sessions").update({last_message_at:new Date().toISOString(),visitor_metadata:{lead_capture:completion.lead}}).eq("id",session.id);
+    let leadId=session.lead_id;
+    if(completion.qualified&&!leadId){const {data:staff}=await db.from("profiles").select("id,role").eq("status","active").in("role",["super_admin","admin","account_manager"]).order("created_at");const owner=staff?.find(person=>person.role==="account_manager")||staff?.[0];if(owner){const lead=completion.lead;const {data:created,error:leadError}=await db.from("leads").insert({name:clean(lead.name)||"Website visitor",business_name:clean(lead.business_name)||"Website enquiry",email:clean(lead.email),phone:clean(lead.phone),website:clean(lead.website),industry:clean(lead.industry),location:clean(lead.location),lead_source:"AI Chatbot",notes:`Required services: ${(lead.required_services||[]).map(item=>clean(item,80)).filter(Boolean).join(", ")}`,status:"new_lead",sales_owner_id:owner.id,created_by:owner.id}).select("id,business_name").single();if(!leadError&&created){leadId=created.id;await Promise.all([db.from("chat_sessions").update({lead_id:leadId,status:"qualified"}).eq("id",session.id),db.from("lead_activities").insert({lead_id:leadId,actor_id:owner.id,activity_type:"note",summary:"Qualified automatically through the DigiUdyam AI chatbot"}),emitNotificationSafe({event:"lead_created",recipientIds:Array.from(new Set((staff||[]).filter(person=>person.role!=="account_manager"||person.id===owner.id).map(person=>person.id))),title:`AI-qualified lead: ${created.business_name}`,body:"The website assistant collected enough information for sales follow-up."})]);}}
+    }
+    return NextResponse.json({session:token,reply:completion.reply,qualified:Boolean(leadId)});
+  }catch(error){if(error instanceof GroqApiError){console.error("Groq chat completion failed",{status:error.status,code:error.code,model:GROQ_MODEL,endpoint:GROQ_ENDPOINT,providerMessage:error.providerMessage});if(error.status===401)return NextResponse.json({session:token,error:"The assistant is temporarily unavailable because its API access needs attention."},{status:502});if(error.status===404)return NextResponse.json({session:token,error:"The configured AI model is unavailable. Please try again shortly."},{status:502});if(error.status===429)return NextResponse.json({session:token,error:"The assistant is busy. Please try again shortly."},{status:429});return NextResponse.json({session:token,error:"The assistant could not respond right now."},{status:502})}console.error("Chat completion failed",{error:error instanceof Error?error.message:"Unknown error"});return NextResponse.json({session:token,error:"The assistant could not respond right now."},{status:502});}
+}

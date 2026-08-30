@@ -1,0 +1,2 @@
+import { LeadsView } from "@/components/portal/LeadsView"; import { PortalHeading } from "@/components/portal/PortalUI"; import { getPortalData } from "@/lib/portal/provider";
+export const metadata={title:"Leads"}; export default async function Leads(){const d=await getPortalData();return <div className="portal-page"><PortalHeading eyebrow="GROWTH / LEADS" title="Every enquiry, clearly organised." copy="See where leads came from, what happened next, and which conversations need follow-up."/><LeadsView leads={d.leads}/></div>}

@@ -1,0 +1,6 @@
+import { notFound } from "next/navigation"; import { serviceMap, services } from "@/lib/content"; import { createMetadata, pageMetadata } from "@/lib/metadata"; import { ServicePage } from "@/components/ServicePage";import {serviceRouteAliases} from "@/lib/seo/routes";import {serviceMoneyPageMap} from "@/lib/service-money-pages";
+const aliases:Record<string,string>=serviceRouteAliases;
+const resolve=(slug:string)=>serviceMap[aliases[slug]||slug];
+export function generateStaticParams(){return [...services.map(({slug})=>({slug})),...Object.keys(aliases).map(slug=>({slug}))]}
+export function generateMetadata({params}:{params:{slug:string}}){const s=resolve(params.slug);if(!s)return {};const path=`/services/${params.slug}`,moneyPage=serviceMoneyPageMap[s.slug];if(moneyPage)return createMetadata({title:moneyPage.metadata.title,description:moneyPage.metadata.description,path,openGraphTitle:moneyPage.metadata.ogTitle,openGraphDescription:moneyPage.metadata.ogDescription});return pageMetadata(`${s.name} for Indian Local Businesses`,`${s.intro} Practical support for Indian local businesses.`,path)}
+export default function Page({params}:{params:{slug:string}}){const service=resolve(params.slug);if(!service)notFound();return <ServicePage service={service} canonicalSlug={params.slug}/>}

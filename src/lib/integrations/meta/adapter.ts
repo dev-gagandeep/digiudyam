@@ -1,0 +1,2 @@
+import "server-only";import type { ProviderAdapter } from "../core";import { ProviderNotConfiguredError } from "../core";
+export const metaAdapter:ProviderAdapter={id:"meta",capabilities:{analytics:false,search:false,localPresence:false,ads:true,leads:true,appointments:false,conversations:false,automations:false},async validateConfiguration(){return Boolean(process.env.META_APP_ID&&process.env.META_APP_SECRET)},async sync(){throw new ProviderNotConfiguredError("meta")}};

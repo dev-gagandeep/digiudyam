@@ -1,0 +1,6 @@
+import { notFound } from "next/navigation"; import { industries, industryMap } from "@/lib/content"; import { createMetadata, pageMetadata } from "@/lib/metadata"; import { IndustryPage } from "@/components/IndustryPage";import {industryRouteAliases} from "@/lib/seo/routes";import {industryMoneyPageMap} from "@/lib/industry-money-pages";
+const aliases:Record<string,string>=industryRouteAliases;
+const resolve=(slug:string)=>industryMap[aliases[slug]||slug];
+export function generateStaticParams(){return [...industries.map(({slug})=>({slug})),...Object.keys(aliases).map(slug=>({slug}))]}
+export function generateMetadata({params}:{params:{slug:string}}){const x=resolve(params.slug);if(!x)return {};const page=industryMoneyPageMap[x.slug];if(page)return createMetadata({title:page.metadata.title,description:page.metadata.description,path:`/industries/${params.slug}`,openGraphTitle:page.metadata.ogTitle,openGraphDescription:page.metadata.ogDescription});return pageMetadata(`Digital Growth for ${x.name} in India`,x.intro,`/industries/${params.slug}`)}
+export default function Page({params}:{params:{slug:string}}){const industry=resolve(params.slug);if(!industry)notFound();return <IndustryPage industry={industry} canonicalSlug={params.slug}/>}

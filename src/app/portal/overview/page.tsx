@@ -1,0 +1,4 @@
+import { AttentionQueue, ActivityFeed, GrowthJourney, GrowthPulse, MetricLedger, PortalHeading } from "@/components/portal/PortalUI"; import { getPortalData } from "@/lib/portal/provider";
+import { ServiceDeliveryOverview } from "@/components/portal/ServiceDeliveryOverview";
+export const metadata={title:"Overview"};
+export default async function Overview(){const d=await getPortalData();return <div className="portal-page overview-page"><PortalHeading eyebrow="OVERVIEW / LIVE DELIVERY" title="Good afternoon." copy="Your active services, completed work and the next delivery actions—all from your live account data."/><GrowthPulse items={d.pulse}/><ServiceDeliveryOverview services={d.serviceDelivery}/><div className="overview-split"><AttentionQueue items={d.attention}/><ActivityFeed items={d.activity}/></div>{d.journey.length>0&&<GrowthJourney stages={d.journey}/>}<MetricLedger metrics={d.metrics}/></div>}

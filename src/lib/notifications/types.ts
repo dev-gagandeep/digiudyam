@@ -1,0 +1,3 @@
+export type CommunicationEvent = "lead_created"|"lead_assigned"|"lead_status_changed"|"follow_up_due"|"client_created"|"invitation_sent"|"service_assigned"|"task_assigned"|"task_completed"|"task_deadline_approaching"|"report_published"|"request_submitted"|"client_request_received";
+export type NotificationChannel = "in_app"|"email"|"whatsapp";
+export type EmitNotificationInput = { event: CommunicationEvent; recipientIds: string[]; organizationId?: string|null; title: string; body: string; severity?: "info"|"warning"|"critical"; email?: { recipients: string[]; actionLabel?: string; actionUrl?: string } };

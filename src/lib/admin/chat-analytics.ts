@@ -1,0 +1,4 @@
+import "server-only";
+import { createSupabaseAdminClient as createSupabaseServerClient } from "@/lib/supabase/admin";
+import { requireAdmin } from "./auth";
+export async function getChatAnalytics(){await requireAdmin("manage_leads");const db=createSupabaseServerClient();const [sessions,messages]=await Promise.all([db.from("chat_sessions").select("id,lead_id,status,last_message_at,created_at").order("last_message_at",{ascending:false}).limit(500),db.from("chat_messages").select("id,session_id,role,content,created_at").order("created_at",{ascending:false}).limit(100)]);if(sessions.error||messages.error)throw sessions.error||messages.error;const rows=sessions.data||[],qualified=rows.filter(row=>row.lead_id).length;return {total:rows.length,qualified,conversionRate:rows.length?Math.round(qualified/rows.length*100):0,recent:rows.slice(0,20).map(session=>({session,...(messages.data||[]).find(message=>message.session_id===session.id&&message.role==="user")}))};}

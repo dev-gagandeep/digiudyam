@@ -1,0 +1,1 @@
+export default function Loading(){return <div className="portal-page portal-loading" aria-label="Loading portal data"><div/><div className="skeleton-row"><i/><i/><i/></div><div className="skeleton-large"/></div>}

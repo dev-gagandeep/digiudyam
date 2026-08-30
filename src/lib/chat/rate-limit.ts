@@ -1,0 +1,2 @@
+type Bucket={count:number;reset:number};const buckets=new Map<string,Bucket>();
+export function takeChatRateLimit(key:string,limit=12,windowMs=60000){const now=Date.now(),current=buckets.get(key);if(!current||current.reset<=now){buckets.set(key,{count:1,reset:now+windowMs});return {allowed:true,retryAfter:0}}if(current.count>=limit)return {allowed:false,retryAfter:Math.ceil((current.reset-now)/1000)};current.count+=1;return {allowed:true,retryAfter:0}}

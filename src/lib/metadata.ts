@@ -1,0 +1,7 @@
+import type { Metadata } from "next";
+import { site } from "./site";
+export type SeoMetadataInput={title:string;description:string;path:string;keywords?:string[];image?:string;type?:"website"|"article";publishedTime?:string;modifiedTime?:string;noIndex?:boolean;openGraphTitle?:string;openGraphDescription?:string};
+const absolute=(path:string)=>path.startsWith("http")?path:`${site.url}${path.startsWith("/")?path:`/${path}`}`;
+export function createMetadata({title,description,path,keywords=[],image="/digiudyam-logo.png",type="website",publishedTime,modifiedTime,noIndex=false,openGraphTitle,openGraphDescription}:SeoMetadataInput):Metadata{const canonical=absolute(path),socialImage=absolute(image),socialTitle=openGraphTitle||`${title} | ${site.name}`,socialDescription=openGraphDescription||description;return {title,description,keywords,alternates:{canonical},robots:noIndex?{index:false,follow:false,nocache:true}:{index:true,follow:true},openGraph:{title:socialTitle,description:socialDescription,url:canonical,siteName:site.name,locale:"en_IN",type,images:[{url:socialImage,alt:`${site.name} — ${title}`}],...(type==="article"?{publishedTime,modifiedTime}: {})},twitter:{card:"summary_large_image",title:socialTitle,description:socialDescription,images:[socialImage]}}}
+export function pageMetadata(title:string,description:string,path:string,keywords:string[]=[]):Metadata{return createMetadata({title,description,path,keywords})}
+export function articleMetadata(input:Omit<SeoMetadataInput,"type">):Metadata{return createMetadata({...input,type:"article"})}

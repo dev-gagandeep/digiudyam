@@ -1,0 +1,6 @@
+const escapeHtml = (value: string) => value.replace(/[&<>'"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[character] || character);
+export function notificationEmail(input: { eyebrow: string; title: string; body: string; actionLabel?: string; actionUrl?: string }) {
+  const title=escapeHtml(input.title),body=escapeHtml(input.body),eyebrow=escapeHtml(input.eyebrow);
+  const action=input.actionLabel&&input.actionUrl?`<a href="${escapeHtml(input.actionUrl)}" style="display:inline-block;background:#1455d9;color:#fff;padding:12px 18px;text-decoration:none;font-weight:700">${escapeHtml(input.actionLabel)}</a>`:"";
+  return { subject: input.title, text: `${input.title}\n\n${input.body}${input.actionUrl?`\n\n${input.actionUrl}`:""}`, html: `<div style="background:#f2f4f5;padding:32px;font-family:Arial,sans-serif;color:#071b33"><div style="max-width:620px;margin:auto;background:#fff;border:1px solid #d4dce3;padding:32px"><p style="font-size:11px;letter-spacing:.12em;color:#69798b">${eyebrow}</p><h1 style="font-size:28px;margin:10px 0 14px">${title}</h1><p style="font-size:15px;line-height:1.65;color:#52677a">${body}</p>${action}</div></div>` };
+}

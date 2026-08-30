@@ -1,0 +1,2 @@
+import "server-only";import type { ProviderAdapter } from "../core";import { ProviderNotConfiguredError } from "../core";
+export const whatsappAdapter:ProviderAdapter={id:"whatsapp",capabilities:{analytics:false,search:false,localPresence:false,ads:false,leads:true,appointments:false,conversations:true,automations:true},async validateConfiguration(){return Boolean(process.env.WHATSAPP_APP_ID&&process.env.WHATSAPP_APP_SECRET)},async sync(){throw new ProviderNotConfiguredError("whatsapp")}};

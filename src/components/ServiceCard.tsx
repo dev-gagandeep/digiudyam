@@ -1,0 +1,3 @@
+import { ArrowUpRight, Browser, MapPin, Megaphone, Robot } from "@phosphor-icons/react/dist/ssr";
+const icons={build:Browser,found:MapPin,customers:Megaphone,automate:Robot};
+export function ServiceCard({index,type,title,copy,items}:{index:string;type:keyof typeof icons;title:string;copy:string;items:string[]}){const Icon=icons[type];return <article className={`service-card service-${type}`}><div className="service-top"><span>{index}</span><Icon size={32} weight="duotone"/></div><h3>{title}</h3><p>{copy}</p><div className="service-items">{items.map(i=><span key={i}>{i}</span>)}</div><a href="#audit" aria-label={`Learn about ${title}`}>Explore <ArrowUpRight/></a></article>}

@@ -1,0 +1,19 @@
+import type { Role } from "./permissions";
+export type ClientStatus="Lead"|"Onboarding"|"Active"|"Paused"|"Archived";export type Health="Healthy"|"Needs Attention"|"Critical";
+export interface AdminUser{id:string;name:string;email:string;role:Role;status:"Active"|"Invited"|"Disabled"}
+export interface AdminClient{id:string;name:string;industry:string;primaryContact:string;contactEmail:string;accountManagerId:string;locations:ClientLocation[];services:ClientService[];status:ClientStatus;health:Health;healthReasons:string[];lastActivity:string;createdAt:string}
+export interface ClientLocation{id:string;name:string;address:string;phone:string;website?:string;googleBusinessId?:string;crmLocationId?:string;serviceArea:string;timezone:string;status:"Active"|"Setup"|"Paused"}
+export interface ClientService{id:string;type:string;status:"Active"|"Setup"|"Paused"|"Completed";startDate:string;ownerId:string;plan:string;notes?:string;reportingEnabled:boolean;integrations:string[];delivery:DeliveryItem[]}
+export interface DeliveryItem{id:string;label:string;status:"Completed"|"In Progress"|"Scheduled"|"Active"|"Upcoming"}
+export interface OnboardingItem{id:string;label:string;status:"Not Started"|"Waiting on Client"|"In Progress"|"Completed"|"Not Applicable"}
+export interface OnboardingRecord{id:string;clientId:string;ownerId:string;startedAt:string;targetDate:string;items:OnboardingItem[]}
+export interface AdminRequest{id:string;clientId:string;type:string;title:string;priority:"Low"|"Normal"|"High"|"Urgent";assigneeId:string;created:string;dueDate:string;status:"New"|"Assigned"|"In Progress"|"Waiting on Client"|"Completed"|"Overdue";internalNotes:number}
+export interface AdminTask{id:string;title:string;clientId:string;locationId?:string;relatedEntity?:{type:"request"|"service"|"report"|"integration";id:string};assigneeId:string;priority:"Low"|"Normal"|"High";dueDate:string;status:"Pending"|"In Progress"|"Review"|"Completed";category:"SEO"|"Website"|"Ads"|"Reputation"|"Automation"|"CRM"|"Content"|"Technical"|"Client Support";notes?:string}
+export interface AdminReport{id:string;clientId:string;title:string;periodType:"Monthly"|"Quarterly"|"Custom";period:string;status:"Draft"|"In Review"|"Published";ownerId:string;updated:string;blocks:ReportBlock[]}
+export interface ReportBlock{id:string;type:"metric"|"trend"|"text"|"completed_work"|"recommendations"|"screenshot"|"traffic"|"keyword_table"|"lead_funnel"|"review_summary";title:string;source?:string}
+export interface IntegrationConnection{id:string;clientId:string;locationId?:string;provider:"Google Analytics"|"Search Console"|"Google Business Profile"|"Google Ads"|"Meta"|"GoHighLevel"|"WhatsApp"|"Call Tracking"|"Website"|"Other";accountIdentifier:string;connectedAt?:string;lastSync?:string;nextSync?:string;status:"Connected"|"Disconnected"|"Expired"|"Action Required"|"Pending"|"Not Configured";errorMessage?:string;scopes:string[];syncStatus:"Idle"|"Syncing"|"Succeeded"|"Failed"}
+export interface TeamAssignment{id:string;clientId:string;userId:string;responsibility:string}
+export interface InternalNote{id:string;clientId:string;authorId:string;timestamp:string;content:string;related?:{type:"service"|"request";id:string}}
+export interface AuditEvent{id:string;actorId:string;action:string;entity:{type:string;id:string};timestamp:string;metadata:Record<string,string>}
+export interface AdminNotification{id:string;type:"integration_failure"|"overdue_request"|"report_due"|"client_response"|"onboarding_blocker";title:string;clientId?:string;created:string;read:boolean;severity:"info"|"warning"|"critical"}
+export interface AdminData{users:AdminUser[];clients:AdminClient[];onboarding:OnboardingRecord[];requests:AdminRequest[];tasks:AdminTask[];reports:AdminReport[];integrations:IntegrationConnection[];assignments:TeamAssignment[];notes:InternalNote[];audit:AuditEvent[];notifications:AdminNotification[]}

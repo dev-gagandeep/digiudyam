@@ -1,0 +1,15 @@
+import "server-only";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { emitNotificationSafe } from "./service";
+
+export async function notifyReportPublished(reportId:string,baseUrl:string){const db=createSupabaseAdminClient();const {data:report,error}=await db.from("reports").select("id,organization_id,title").eq("id",reportId).eq("status","published").single();if(error)throw error;const {data:members,error:membersError}=await db.from("organization_members").select("user_id").eq("organization_id",report.organization_id).eq("status","active");if(membersError)throw membersError;const recipientIds=(members||[]).map(member=>member.user_id);const {data:profiles,error:profilesError}=recipientIds.length?await db.from("profiles").select("id,email").in("id",recipientIds):{data:[],error:null};if(profilesError)throw profilesError;return emitNotificationSafe({event:"report_published",recipientIds,organizationId:report.organization_id,title:`Report published: ${report.title}`,body:"Your latest DigiUdyam report is ready to review.",email:{recipients:(profiles||[]).map(profile=>profile.email||"").filter(Boolean),actionLabel:"View report",actionUrl:`${baseUrl}/portal/reports`}})}
+
+export async function runDueCommunicationSweep(now=new Date()){
+  const db=createSupabaseAdminClient(),windowEnd=new Date(now.getTime()+24*60*60*1000).toISOString(),dayStart=new Date(now);dayStart.setHours(0,0,0,0);
+  const [leads,tasks]=await Promise.all([db.from("leads").select("id,business_name,sales_owner_id,follow_up_at").is("archived_at",null).not("sales_owner_id","is",null).lte("follow_up_at",now.toISOString()),db.from("tasks").select("id,title,organization_id,assignee_id,due_at").neq("status","completed").not("assignee_id","is",null).gte("due_at",now.toISOString()).lte("due_at",windowEnd)]);
+  if(leads.error||tasks.error)throw leads.error||tasks.error;
+  const existing=await db.from("notifications").select("user_id,notification_type,title").gte("created_at",dayStart.toISOString()).in("notification_type",["follow_up_due","task_deadline_approaching"]);if(existing.error)throw existing.error;
+  const seen=new Set((existing.data||[]).map(item=>`${item.user_id}:${item.notification_type}:${item.title}`));
+  const jobs=[...(leads.data||[]).filter(lead=>!seen.has(`${lead.sales_owner_id}:follow_up_due:Follow-up due: ${lead.business_name}`)).map(lead=>emitNotificationSafe({event:"follow_up_due" as const,recipientIds:[lead.sales_owner_id!],title:`Follow-up due: ${lead.business_name}`,body:"This lead has reached its scheduled follow-up time.",severity:"warning" as const})),...(tasks.data||[]).filter(task=>!seen.has(`${task.assignee_id}:task_deadline_approaching:Deadline approaching: ${task.title}`)).map(task=>emitNotificationSafe({event:"task_deadline_approaching" as const,recipientIds:[task.assignee_id!],organizationId:task.organization_id,title:`Deadline approaching: ${task.title}`,body:"This task is due within the next 24 hours.",severity:"warning" as const}))];
+  return Promise.all(jobs);
+}

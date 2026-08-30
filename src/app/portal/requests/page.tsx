@@ -1,0 +1,6 @@
+import { RequestForm } from "@/components/portal/RequestForm";
+import { PortalHeading } from "@/components/portal/PortalUI";
+import { getPortalData } from "@/lib/portal/provider";
+
+export const metadata={title:"Requests"};
+export default async function Requests(){const data=await getPortalData();return <div className="portal-page"><PortalHeading eyebrow="ACCOUNT / REQUESTS" title="Request work without WhatsApp chaos." copy="Give every website, campaign, SEO or support request a clear owner and status." action={<RequestForm/>}/><div className="request-statuses">{["Submitted","In Review","In Progress","Waiting for Client","Completed"].map(status=><div key={status}><span>{status}</span><b>{data.requests.filter(request=>request.status===status).length}</b></div>)}</div><section className="request-history"><header><span>REQUEST HISTORY</span><b>{data.requests.length} requests</b></header>{data.requests.map(request=><article key={request.id}><span>{request.id}</span><div><b>{request.title}</b><small>{request.type}</small></div><em>{request.priority}</em><strong className={`request-${request.status.toLowerCase().replaceAll(" ","-")}`}>{request.status}</strong><time>{request.updated}</time></article>)}</section></div>}

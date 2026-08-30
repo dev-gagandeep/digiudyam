@@ -1,0 +1,2 @@
+import "server-only";import { createClient } from "@supabase/supabase-js";import type { Database } from "./database.types";import { requireSupabasePublicEnv } from "./env";
+export function createSupabaseAdminClient(){const {url}=requireSupabasePublicEnv();const secret=process.env.SUPABASE_SECRET_KEY;if(!secret)throw new Error("SUPABASE_SECRET_KEY is missing from the server environment.");return createClient<Database>(url,secret,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}})}

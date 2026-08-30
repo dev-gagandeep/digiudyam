@@ -1,0 +1,5 @@
+"use client";
+import { useRef } from "react"; import { useGSAP } from "@gsap/react"; import gsap from "gsap"; import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
+export function Reveal({children,className=""}:{children:React.ReactNode;className?:string}){const ref=useRef<HTMLDivElement>(null);useGSAP(()=>{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;gsap.fromTo(ref.current,{y:32,opacity:0},{y:0,opacity:1,duration:.8,ease:"power3.out",scrollTrigger:{trigger:ref.current,start:"top 88%",once:true}})},{scope:ref});return <div ref={ref} className={className}>{children}</div>}
+export function GrowthPath({children}:{children:React.ReactNode}){const ref=useRef<HTMLDivElement>(null);useGSAP(()=>{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;gsap.from(".path-stage",{opacity:.25,scale:.96,stagger:.15,scrollTrigger:{trigger:ref.current,start:"top 70%",end:"bottom 65%",scrub:.7}});gsap.fromTo(".path-line i",{scaleX:0},{scaleX:1,transformOrigin:"left",scrollTrigger:{trigger:ref.current,start:"top 70%",end:"bottom 70%",scrub:true}})},{scope:ref});return <div ref={ref}>{children}</div>}
