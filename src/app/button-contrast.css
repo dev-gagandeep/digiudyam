@@ -1,0 +1,20 @@
+.button.button-primary,
+.button.button-primary:visited,
+.button.button-primary:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+.button.button-secondary,
+.button.button-secondary:visited,
+.button.button-secondary:hover {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.button.button-light,
+.button.button-light:visited,
+.button.button-light:hover {
+  color: var(--navy);
+  text-decoration: none;
+}

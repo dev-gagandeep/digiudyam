@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import "./globals.css";
+import "./button-contrast.css";
 import "./trust.css";
 import "./internal-links.css";
 import "./case-studies.css";
