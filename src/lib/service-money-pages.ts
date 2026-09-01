@@ -50,8 +50,8 @@ export type ServiceMoneyPage = {
 
 const websiteDevelopment: ServiceMoneyPage = {
   metadata: {
-    title: "Website Development Services India for Small Businesses",
-    description: "Website development services for Indian MSMEs and small businesses. Plan a professional, mobile-friendly website around your goals and enquiries.",
+    title: "Website Development Company for India",
+    description: "Affordable website development for Indian MSMEs. Get professional, mobile-friendly small business website design focused on trust and enquiries.",
     ogTitle: "Website Development for Indian Small Businesses",
     ogDescription: "Build a professional business website planned around your customers, services and enquiry goals with DigiUdyam.",
     imageAlt: "Business owner reviewing a responsive website developed for an Indian small business",
