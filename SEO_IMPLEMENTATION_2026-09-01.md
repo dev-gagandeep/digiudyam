@@ -28,11 +28,11 @@
 - Blog, service and industry templates already create contextual cross-links.
 - Next Image already provides optimized AVIF/WebP delivery and lazy loading for non-priority imagery.
 
-## Awaiting verified business information
+## Verified public contact information
 
-Phone and WhatsApp links are implemented but render only when these deployment variables contain real business-controlled numbers:
-
-- `NEXT_PUBLIC_BUSINESS_PHONE`
-- `NEXT_PUBLIC_WHATSAPP_NUMBER`
+- Call: `+91 62849 57892`
+- WhatsApp: `+91 62849 57892`
+- The number is published in the footer, Contact page and Organization structured data.
+- Deployment variables `NEXT_PUBLIC_BUSINESS_PHONE` and `NEXT_PUBLIC_WHATSAPP_NUMBER` can override these values if the public number changes later.
 
 A street address was not invented. The public identity currently states India / pan-India remote service. Add a precise address only if it is a genuine customer-facing business location.
