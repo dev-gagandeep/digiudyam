@@ -36,3 +36,12 @@
 - Deployment variables `NEXT_PUBLIC_BUSINESS_PHONE` and `NEXT_PUBLIC_WHATSAPP_NUMBER` can override these values if the public number changes later.
 
 A street address was not invented. The public identity currently states India / pan-India remote service. Add a precise address only if it is a genuine customer-facing business location.
+
+## Small-business website commercial guide
+
+- Added `/website-development-company-for-small-business-india` with the user-approved content unchanged.
+- Added the supplied feature and process images with approved alt text and captions.
+- Added Service, FAQPage, Article and BreadcrumbList schema, author/company information, business contacts and updated date.
+- Added the guide to the Website Development category on the Blog page.
+- Added a table of contents, relevant service and industry links, related blogs and consultation/audit CTAs.
+- Updated the official public email to `hello@digiudyam.in` across public contact surfaces.
