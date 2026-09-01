@@ -5,6 +5,26 @@ main#main {
   --public-card-shadow: 0 14px 42px rgba(11, 33, 61, .065);
 }
 
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+main#main,
+main#main section,
+main#main .container,
+main#main .container > *,
+footer .container,
+footer .container > * {
+  min-width: 0;
+}
+
+main#main :where(h1, h2, h3, p, li, a, span),
+footer :where(p, a, span) {
+  overflow-wrap: anywhere;
+}
+
 /* Readability floor for public-facing copy and actions. */
 main#main :where(p, li, small),
 main#main :where(.button, .text-link, .inner-hero-links a, .money-contact-line) {
@@ -607,5 +627,61 @@ main#main .heading-row {
 
   main#main .msme-collage {
     min-height: 470px;
+  }
+
+  main#main .trust-strip .container {
+    align-items: stretch;
+    gap: 18px;
+  }
+
+  main#main .trust-strip p {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  main#main .trust-strip .container > div {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  main#main .trust-strip span {
+    min-width: 0;
+    justify-content: flex-start;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #f7f9fb;
+  }
+
+  main#main :where(.hero-actions, .money-hero-actions, .money-final-actions, .sbw-actions, .sbw-cta > div > div) {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  main#main :where(.hero-actions, .money-hero-actions, .money-final-actions, .sbw-actions, .sbw-cta > div > div) a,
+  main#main :where(.hero-actions, .money-hero-actions, .money-final-actions, .sbw-actions, .sbw-cta > div > div) .button {
+    width: 100%;
+    max-width: 100%;
+    white-space: normal;
+    text-align: center;
+  }
+
+  main#main .money-table-wrap,
+  main#main .sbw-features {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  footer .footer-brand a,
+  footer .footer-service-area {
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
 }
