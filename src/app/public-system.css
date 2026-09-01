@@ -1,0 +1,611 @@
+/* Public-site rhythm and readability layer. Scoped away from admin and portal. */
+main#main {
+  --public-section-space: 92px;
+  --public-card-radius: 18px;
+  --public-card-shadow: 0 14px 42px rgba(11, 33, 61, .065);
+}
+
+/* Readability floor for public-facing copy and actions. */
+main#main :where(p, li, small),
+main#main :where(.button, .text-link, .inner-hero-links a, .money-contact-line) {
+  font-size: 16px !important;
+}
+
+main#main :where(.eyebrow, .home-service-copy > div span, .audit-intro > div span, .capability-list span, .industry-parent-link, .sbw-actions a, .sbw-related a) {
+  font-size: 16px !important;
+}
+
+/* A distinctive editorial homepage hero, separate from inner-page templates. */
+main#main .home-hero {
+  min-height: auto;
+  padding: 132px 0 84px;
+  background:
+    radial-gradient(circle at 88% 18%, rgba(20, 85, 217, .12), transparent 27%),
+    linear-gradient(135deg, #f8f6f0 0%, #eef3f7 100%);
+}
+
+main#main .home-hero .hero-mast {
+  padding-top: 18px;
+}
+
+main#main .home-hero > .container > h1 {
+  max-width: 1080px;
+  margin: 48px 0 0;
+  font-size: clamp(62px, 8.5vw, 116px);
+  line-height: .9;
+  letter-spacing: -.07em;
+}
+
+main#main .home-hero-grid {
+  grid-template-columns: minmax(0, .76fr) minmax(0, 1.24fr);
+  gap: 72px;
+  align-items: end;
+  margin-top: 58px;
+}
+
+main#main .home-hero-grid > div:first-child {
+  padding: 30px;
+  border: 1px solid rgba(11, 33, 61, .13);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, .72);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--public-card-shadow);
+}
+
+main#main .home-hero-grid > div > p:first-child {
+  margin-top: 0;
+  color: #263c54;
+  font-size: 18px !important;
+}
+
+main#main .home-hero-grid .hero-support {
+  font-size: 16px !important;
+}
+
+main#main .home-hero-photo {
+  height: 520px;
+  border-radius: 26px 26px 80px 26px;
+  box-shadow: 22px 22px 0 #d5dfe6;
+}
+
+/* Homepage section two: concise hierarchy, full content, less empty space. */
+main#main .msme-story > .container {
+  display: block;
+}
+
+main#main .msme-story > .container > .section-heading {
+  max-width: 920px;
+}
+
+main#main .msme-story-grid {
+  display: grid;
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+  gap: 46px;
+  align-items: stretch;
+  margin-top: 44px;
+}
+
+main#main .msme-copy {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+main#main .msme-copy > p,
+main#main .msme-struggle-card {
+  margin: 0;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--public-card-shadow);
+}
+
+main#main .msme-struggle-card {
+  grid-column: 1 / -1;
+  background: #092443;
+  color: #fff;
+}
+
+main#main .msme-struggle-card > p {
+  margin: 0 0 18px;
+  color: #fff;
+  font-weight: 800;
+}
+
+main#main .msme-struggles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+main#main .msme-struggles span {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .08);
+  font-size: 16px;
+  color: #fff;
+}
+
+main#main .msme-struggles svg {
+  flex: none;
+  color: #55d6a6;
+}
+
+main#main .msme-collage {
+  height: auto;
+  min-height: 500px;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+/* Shared service and industry detail hero: title first, copy left, visual right. */
+main#main .detail-hero-title {
+  max-width: 1100px;
+  margin: 34px 0 48px;
+}
+
+main#main .detail-hero-title .eyebrow {
+  margin-bottom: 18px;
+}
+
+main#main .detail-hero-title h1 {
+  max-width: none;
+  margin: 0;
+  font-size: clamp(52px, 6.5vw, 88px);
+  line-height: .98;
+  letter-spacing: -.06em;
+}
+
+main#main .service-hero .inner-hero-grid,
+main#main .industry-hero-grid {
+  grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr);
+  gap: 62px;
+  align-items: center;
+}
+
+main#main .service-hero .inner-hero-grid > div:first-child,
+main#main .industry-hero-grid > div:first-child {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255,255,255,.76);
+}
+
+main#main .service-hero .inner-hero-grid > div:first-child > p:first-child,
+main#main .industry-hero-grid > div:first-child > p:first-child {
+  margin-top: 0;
+}
+
+main#main .service-hero-photo,
+main#main .industry-hero-image {
+  border-radius: 22px;
+  box-shadow: var(--public-card-shadow);
+}
+
+main#main .sbw-hero-title {
+  max-width: 1120px;
+  margin: 34px 0 50px;
+}
+
+main#main .sbw-hero-title h1 {
+  margin: 0;
+  font-size: clamp(56px, 7.2vw, 96px);
+  line-height: .95;
+  letter-spacing: -.065em;
+}
+
+main#main .sbw-hero-grid {
+  grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr);
+  gap: 62px;
+  align-items: center;
+}
+
+main#main .sbw-hero-grid > div:first-child {
+  padding: 28px;
+  border: 1px solid #d7e0e7;
+  border-radius: 20px;
+  background: rgba(255,255,255,.75);
+  box-shadow: var(--public-card-shadow);
+}
+
+main#main .sbw-hero-grid > div:first-child h2 {
+  margin-top: 0;
+}
+
+main#main .section,
+main#main .money-section,
+main#main .services-principles,
+main#main .services-faq,
+main#main .sbw-section,
+main#main .sbw-trust,
+main#main .sbw-business,
+main#main .sbw-related,
+main#main .sbw-cta {
+  padding-top: var(--public-section-space);
+  padding-bottom: var(--public-section-space);
+}
+
+/* Keep every eyebrow attached to the heading it introduces. */
+main#main .section-heading,
+main#main .sbw-heading,
+main#main .challenge-head,
+main#main .services-principles-head {
+  display: block;
+  max-width: 820px;
+}
+
+main#main .section-heading .eyebrow,
+main#main .sbw-heading .eyebrow,
+main#main .challenge-head .eyebrow,
+main#main .services-principles-head .eyebrow {
+  margin: 0 0 18px;
+}
+
+main#main .sbw-heading h2,
+main#main .sbw-heading > p,
+main#main .challenge-head h2 {
+  grid-column: auto;
+  grid-row: auto;
+}
+
+main#main .sbw-heading,
+main#main .challenge-head {
+  margin-bottom: 44px;
+}
+
+main#main .sbw-heading > p {
+  max-width: 680px;
+  margin: 20px 0 0;
+}
+
+/* Editorial copy must remain comfortable to read throughout the public site. */
+main#main .section-heading > p,
+main#main .hero-editorial > p,
+main#main .home-hero-copy > p,
+main#main .home-service-copy > p,
+main#main .foundation-panel > p,
+main#main .alert-row p,
+main#main .services-principles-head > p,
+main#main .services-principles-grid article > p,
+main#main .money-section-content > p,
+main#main .money-groups article > p,
+main#main .money-list li,
+main#main .industry-copy-grid p,
+main#main .sbw-page p,
+main#main .sbw-page li,
+main#main .article-body p,
+main#main .article-body li {
+  font-size: 16px !important;
+  line-height: 1.72;
+}
+
+main#main .about-story-grid p,
+main#main .about-msme p,
+main#main .about-belief p,
+main#main .about-mission p,
+main#main .about-objectives p,
+main#main .about-industries p,
+main#main .about-process p,
+main#main .about-vision p,
+main#main .about-capabilities article p,
+main#main .why-points p,
+main#main .home-faq details p,
+main#main .directory-group header p,
+main#main .industry-directory p,
+main#main .contact-intro > p,
+main#main .audit-intro > p {
+  font-size: 16px !important;
+  line-height: 1.72;
+}
+
+/* Replace connected spreadsheet-like blocks with calm, grouped cards. */
+main#main .services-principles-grid,
+main#main .money-groups,
+main#main .industry-copy-grid,
+main#main .sbw-grid {
+  gap: 16px;
+  border: 0;
+}
+
+main#main .services-principles-grid article,
+main#main .money-groups article,
+main#main .industry-copy-grid p,
+main#main .sbw-grid article,
+main#main .sbw-industry-grid a,
+main#main .sbw-related article,
+main#main .challenge-list article,
+main#main .why-points article,
+main#main .about-challenges p,
+main#main .about-principles p,
+main#main .about-process article,
+main#main .directory-services > a,
+main#main .industry-directory a,
+main#main .home-faq details {
+  border: 1px solid var(--line);
+  border-radius: var(--public-card-radius);
+  background: #fff;
+  box-shadow: var(--public-card-shadow);
+}
+
+main#main .challenge-list,
+main#main .why-points,
+main#main .about-challenges,
+main#main .principle-list,
+main#main .directory-services,
+main#main .industry-directory .container,
+main#main .home-faq .container > div:last-child {
+  border: 0;
+}
+
+main#main .challenge-list,
+main#main .why-points,
+main#main .about-challenges,
+main#main .principle-list,
+main#main .directory-services,
+main#main .industry-directory .container,
+main#main .home-faq .container > div:last-child {
+  display: grid;
+  gap: 16px;
+}
+
+main#main .challenge-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+main#main .challenge-list article {
+  display: block;
+  min-height: 210px;
+  padding: 28px;
+}
+
+main#main .challenge-list article > span {
+  display: block;
+  margin-bottom: 34px;
+}
+
+main#main .challenge-list article h3 {
+  margin: 0 0 10px;
+  font-size: 21px;
+}
+
+main#main .challenge-list article p {
+  margin: 0;
+  font-weight: 500;
+}
+
+main#main .why-points article,
+main#main .principle-list article {
+  border: 1px solid var(--line);
+  border-radius: var(--public-card-radius);
+  padding: 24px;
+  background: #fff;
+}
+
+main#main .about-challenges,
+main#main .about-principles > .container > div,
+main#main .about-process > .container > div:last-child {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  border: 0;
+}
+
+main#main .about-challenges p,
+main#main .about-principles p,
+main#main .about-principles p:nth-child(odd) {
+  border: 1px solid var(--line);
+  padding: 24px;
+}
+
+main#main .about-process article {
+  border: 1px solid var(--line);
+  padding: 26px;
+}
+
+main#main .directory-body {
+  gap: 52px;
+  padding-top: var(--public-section-space);
+  padding-bottom: var(--public-section-space);
+}
+
+main#main .directory-group {
+  padding-bottom: 70px;
+  margin-bottom: 70px;
+}
+
+main#main .directory-group header {
+  display: block;
+  max-width: 780px;
+}
+
+main#main .directory-group header > span {
+  display: block;
+  margin-bottom: 14px;
+}
+
+main#main .directory-services {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+main#main .directory-services > a,
+main#main .industry-directory a {
+  border: 1px solid var(--line);
+  padding: 22px;
+}
+
+main#main .industry-directory .container {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+main#main .industry-directory a {
+  grid-template-columns: 32px 120px 1fr 24px;
+}
+
+main#main .contact-form,
+main#main .growth-audit-form,
+main#main .audit-success {
+  border-radius: 20px;
+  box-shadow: var(--public-card-shadow);
+}
+
+main#main .home-faq details {
+  padding: 24px;
+}
+
+main#main .home-faq details:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+main#main .home-faq details p {
+  margin-left: 42px;
+}
+
+main#main .services-principles-grid article,
+main#main .services-principles-grid article:nth-child(odd),
+main#main .services-principles-grid article:last-child {
+  border: 1px solid var(--line);
+  min-height: 175px;
+}
+
+main#main .services-principles-grid article > p {
+  margin-top: 42px;
+}
+
+main#main .money-groups article {
+  padding: 28px;
+}
+
+main#main .industry-copy-grid p {
+  padding: 24px;
+}
+
+/* Preserve the intended dark card system while using the same geometry. */
+main#main .sbw-dark .sbw-grid article {
+  background: #0d2947;
+  border-color: #294663;
+}
+
+/* Tighter relationships between headings and the content that follows. */
+main#main .service-grid,
+main#main .home-service-list,
+main#main .industry-rail,
+main#main .process-grid,
+main#main .money-groups {
+  margin-top: 44px;
+}
+
+main#main .challenge-list {
+  margin-top: 42px;
+}
+
+main#main .heading-row {
+  align-items: flex-end;
+}
+
+@media (max-width: 900px) {
+  main#main { --public-section-space: 76px; }
+
+  main#main .heading-row {
+    align-items: flex-start;
+  }
+
+  main#main .challenge-list,
+  main#main .directory-services,
+  main#main .industry-directory .container,
+  main#main .about-challenges,
+  main#main .about-principles > .container > div {
+    grid-template-columns: 1fr;
+  }
+
+  main#main .industry-directory a {
+    grid-template-columns: 32px 100px 1fr 24px;
+  }
+
+  main#main .home-hero-grid,
+  main#main .msme-story-grid,
+  main#main .service-hero .inner-hero-grid,
+  main#main .industry-hero-grid,
+  main#main .sbw-hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  main#main .home-hero-photo {
+    height: 500px;
+  }
+}
+
+@media (max-width: 600px) {
+  main#main { --public-section-space: 62px; }
+
+  main#main .section-heading .eyebrow,
+  main#main .sbw-heading .eyebrow,
+  main#main .challenge-head .eyebrow,
+  main#main .services-principles-head .eyebrow {
+    margin-bottom: 14px;
+  }
+
+  main#main .sbw-heading,
+  main#main .challenge-head {
+    margin-bottom: 34px;
+  }
+
+  main#main .services-principles-grid article,
+  main#main .services-principles-grid article:nth-child(odd),
+  main#main .services-principles-grid article:last-child {
+    padding: 22px;
+    min-height: 0;
+  }
+
+  main#main .directory-body {
+    display: block;
+  }
+
+  main#main .directory-body > aside {
+    position: static;
+    margin-bottom: 44px;
+  }
+
+  main#main .industry-directory a {
+    grid-template-columns: 28px 1fr 22px;
+  }
+
+  main#main .industry-directory .directory-image {
+    display: none;
+  }
+
+  main#main .home-hero {
+    padding: 110px 0 62px;
+  }
+
+  main#main .home-hero > .container > h1,
+  main#main .detail-hero-title h1,
+  main#main .sbw-hero-title h1 {
+    font-size: 46px;
+  }
+
+  main#main .home-hero-grid,
+  main#main .msme-story-grid,
+  main#main .detail-hero-title,
+  main#main .sbw-hero-title {
+    margin-top: 34px;
+  }
+
+  main#main .home-hero-grid > div:first-child,
+  main#main .service-hero .inner-hero-grid > div:first-child,
+  main#main .industry-hero-grid > div:first-child,
+  main#main .sbw-hero-grid > div:first-child {
+    padding: 22px;
+  }
+
+  main#main .msme-copy,
+  main#main .msme-struggles {
+    grid-template-columns: 1fr;
+  }
+
+  main#main .msme-collage {
+    min-height: 470px;
+  }
+}

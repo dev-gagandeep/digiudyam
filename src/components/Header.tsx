@@ -14,7 +14,7 @@ const serviceGroups=[
 const industries=[
   {n:"Clinics",d:"Patient discovery and enquiry journeys.",h:"/industries/clinics"},{n:"Restaurants",d:"Local discovery, menus and reviews.",h:"/industries/restaurants"},{n:"Real Estate",d:"Property enquiries and organised follow-up.",h:"/industries/real-estate"},{n:"Home Services",d:"Local trust, quotes and lead response.",h:"/industries/home-services"},{n:"Beauty & Wellness",d:"Appointments, reviews and repeat visits.",h:"/industries/beauty-wellness"},{n:"Education",d:"Programme discovery and admission enquiries.",h:"/industries/education"},{n:"Professional Services",d:"Authority and consultation enquiries.",h:"/industries/professional-services"},{n:"Retail Shops",d:"Nearby discovery and customer communication.",h:"/industries/retail-shops"}
 ];
-const nav=[{n:"Solutions",h:"/services"},{n:"Our Work",h:"/our-work"},{n:"About",h:"/about"},{n:"Resources",h:"/resources"},{n:"Contact",h:"/contact"}];
+const nav=[{n:"Solutions",h:"/services"},{n:"Our Work",h:"/our-work"},{n:"About",h:"/about"},{n:"Blog",h:"/blog"},{n:"Contact",h:"/contact"}];
 
 export function Header(){
   const [mobile,setMobile]=useState(false),[open,setOpen]=useState<"services"|"industries"|null>(null),[scrolled,setScrolled]=useState(false);
