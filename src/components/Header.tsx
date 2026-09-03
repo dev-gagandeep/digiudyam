@@ -1,5 +1,5 @@
 "use client";
-import { useEffect,useState } from "react";
+import { useEffect,useRef,useState } from "react";
 import Link from "next/link";
 import { ArrowRight,CaretDown,List,X } from "@phosphor-icons/react";
 import { Logo } from "./Logo";
@@ -18,15 +18,18 @@ const nav=[{n:"Solutions",h:"/services"},{n:"Our Work",h:"/our-work"},{n:"About"
 
 export function Header(){
   const [mobile,setMobile]=useState(false),[open,setOpen]=useState<"services"|"industries"|null>(null),[scrolled,setScrolled]=useState(false);
+  const closeTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
   useEffect(()=>{const onScroll=()=>setScrolled(window.scrollY>16);onScroll();window.addEventListener("scroll",onScroll,{passive:true});return()=>window.removeEventListener("scroll",onScroll)},[]);
   useEffect(()=>{document.body.style.overflow=mobile?"hidden":"";return()=>{document.body.style.overflow=""}},[mobile]);
   useEffect(()=>{const close=(event:KeyboardEvent)=>{if(event.key==="Escape"){setMobile(false);setOpen(null)}};window.addEventListener("keydown",close);return()=>window.removeEventListener("keydown",close)},[]);
-  const closeMenus=()=>setOpen(null);
+  const keepMenuOpen=()=>{if(closeTimer.current){clearTimeout(closeTimer.current);closeTimer.current=null}};
+  const closeMenus=()=>{keepMenuOpen();setOpen(null)};
+  const scheduleMenuClose=()=>{keepMenuOpen();closeTimer.current=setTimeout(()=>setOpen(null),320)};
   return <header className={`site-header ${scrolled?"scrolled":""}`}>
     <div className="header-inner"><Logo/><nav className="desktop-nav" aria-label="Primary navigation"><Link href="/">Home</Link>
-      <div className="mega-wrap" onMouseLeave={closeMenus}><button onClick={()=>setOpen(open==="services"?null:"services")} onMouseEnter={()=>setOpen("services")} aria-expanded={open==="services"}>Services <CaretDown size={14} weight="bold"/></button>{open==="services"&&<div className="mega-menu service-mega"><header><span>SERVICES / CONNECTED GROWTH</span><h3>Choose the outcome your business needs next.</h3><p>Start with one priority or connect services into a practical growth system.</p><Link href="/services" onClick={closeMenus}>View all services <ArrowRight/></Link></header><div className="mega-service-groups">{serviceGroups.map((group,index)=><section key={group.label}><div><span>0{index+1}</span><h4>{group.label}</h4><p>{group.copy}</p></div><div className="mega-link-list">{group.links.map(link=><Link href={link.h} key={link.n} onClick={closeMenus}><span><b>{link.n}</b><small>{link.d}</small></span><ArrowRight/></Link>)}</div></section>)}</div></div>}</div>
+      <div className="mega-wrap" onMouseEnter={keepMenuOpen} onMouseLeave={scheduleMenuClose}><button onClick={()=>setOpen(open==="services"?null:"services")} onMouseEnter={()=>{keepMenuOpen();setOpen("services")}} aria-expanded={open==="services"}>Services <CaretDown size={14} weight="bold"/></button>{open==="services"&&<div className="mega-menu service-mega" onMouseEnter={keepMenuOpen} onMouseLeave={scheduleMenuClose}><header><span>SERVICES / CONNECTED GROWTH</span><h3>Choose the outcome your business needs next.</h3><p>Start with one priority or connect services into a practical growth system.</p><Link href="/services" onClick={closeMenus}>View all services <ArrowRight/></Link></header><div className="mega-service-groups">{serviceGroups.map((group,index)=><section key={group.label}><div><span>0{index+1}</span><h4>{group.label}</h4><p>{group.copy}</p></div><div className="mega-link-list">{group.links.map(link=><Link href={link.h} key={link.n} onClick={closeMenus}><span><b>{link.n}</b><small>{link.d}</small></span><ArrowRight/></Link>)}</div></section>)}</div></div>}</div>
       <Link href="/services">Solutions</Link>
-      <div className="mega-wrap industry-wrap" onMouseLeave={closeMenus}><button onClick={()=>setOpen(open==="industries"?null:"industries")} onMouseEnter={()=>setOpen("industries")} aria-expanded={open==="industries"}>Industries <CaretDown size={14} weight="bold"/></button>{open==="industries"&&<div className="industry-menu"><header><span>INDUSTRIES WE HELP</span><h3>Digital growth shaped around how your customers decide.</h3><Link href="/industries" onClick={closeMenus}>Explore all industries <ArrowRight/></Link></header><div>{industries.map((industry,index)=><Link href={industry.h} key={industry.n} onClick={closeMenus}><b>0{index+1}</b><span><strong>{industry.n}</strong><small>{industry.d}</small></span><ArrowRight/></Link>)}</div></div>}</div>
+      <div className="mega-wrap industry-wrap" onMouseEnter={keepMenuOpen} onMouseLeave={scheduleMenuClose}><button onClick={()=>setOpen(open==="industries"?null:"industries")} onMouseEnter={()=>{keepMenuOpen();setOpen("industries")}} aria-expanded={open==="industries"}>Industries <CaretDown size={14} weight="bold"/></button>{open==="industries"&&<div className="industry-menu" onMouseEnter={keepMenuOpen} onMouseLeave={scheduleMenuClose}><header><span>INDUSTRIES WE HELP</span><h3>Digital growth shaped around how your customers decide.</h3><Link href="/industries" onClick={closeMenus}>Explore all industries <ArrowRight/></Link></header><div>{industries.map((industry,index)=><Link href={industry.h} key={industry.n} onClick={closeMenus}><b>0{index+1}</b><span><strong>{industry.n}</strong><small>{industry.d}</small></span><ArrowRight/></Link>)}</div></div>}</div>
       {nav.slice(1).map(item=><Link key={item.n} href={item.h}>{item.n}</Link>)}</nav>
       <div className="header-actions"><Button href="/free-audit">Free Growth Audit</Button><button className="menu-toggle" onClick={()=>setMobile(!mobile)} aria-expanded={mobile} aria-label={mobile?"Close menu":"Open menu"}>{mobile?<X size={24}/>:<List size={25}/>}</button></div>
     </div>
